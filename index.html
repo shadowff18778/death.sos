@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Death.SOS</title>
+    <style>
+        :root {
+            --ios-blur: blur(30px) saturate(210%);
+            --ios-bg: rgba(255, 255, 255, 0.07);
+            --ios-border: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --text-sub: rgba(255, 255, 255, 0.6);
+            --system-red: #ff453a;
+            --system-blue: #0a84ff;
+            --system-green: #30d158;
+        }
+
+        /* Verrouillage de la sélection de texte */
+        * {
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #1c1c1e 0%, #000000 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* Titre Premium */
+        header {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* Conteneur principal style iPhone Glass */
+        .glass-card {
+            background: var(--ios-bg);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border: 1px solid var(--ios-border);
+            border-radius: 28px;
+            padding: 30px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            
+            /* Animation d'entrée élastique / liquide */
+            opacity: 0;
+            transform: scale(0.5) translateY(100px);
+            animation: fluidEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fluidEntrance {
+            0% { opacity: 0; transform: scale(0.4) translateY(150px) rotateX(20deg); filter: blur(15px); }
+            60% { transform: scale(1.05) translateY(-10px) rotateX(-5deg); filter: blur(0px); }
+            80% { transform: scale(0.98) translateY(2px); }
+            100% { opacity: 1; transform: scale(1) translateY(0) rotateX(0deg); }
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-top: 0;
+            color: var(--system-red);
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.4;
+            color: var(--text-sub);
+        }
+
+        /* Boutons de style iOS */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-danger { background: var(--system-red); }
+        .btn-danger:active { background: #ff3b30; }
+        .btn-blue { background: var(--system-blue); }
+        .btn-success { background: var(--system-green); }
+
+        /* Interface de Test cachée au début */
+        #main-interface {
+            display: none;
+        }
+
+        /* Animation de chargement fluide */
+        .loader-box {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.05);
+            border-top-color: var(--system-red);
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #timer {
+            font-size: 36px;
+            font-weight: 700;
+            margin-top: 15px;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(180deg, #ffffff 0%, #ff453a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #multiplier-badge {
+            font-size: 12px;
+            background: rgba(255, 69, 58, 0.15);
+            color: var(--system-red);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 69, 58, 0.3);
+            display: none;
+        }
+
+        /* Footer discret */
+        footer {
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.5px;
+        }
+
+        #btn-cancel {
+            display: none;
+            background: rgba(255, 69, 58, 0.15);
+            color: var(--system-red);
+            border: 1px solid rgba(255, 69, 58, 0.3);
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Death.SOS</h1>
+    </header>
+
+    <!-- Modal d'Avertissement Liquide -->
+    <div id="warning-card" class="glass-card">
+        <h2>Avertissement thermique</h2>
+        <p>Ce protocole va pousser votre processeur au-delà de ses limites de sécurité standard. Une surchauffe immédiate de l'appareil est attendue.</p>
+        <div class="btn-group">
+            <button class="btn-danger" onclick="initiateSite()">Accepter et continuer</button>
+            <button class="btn-blue" onclick="abortSite()">Refuser et quitter</button>
+        </div>
+    </div>
+
+    <!-- Interface principale de benchmark -->
+    <div id="main-interface" class="glass-card">
+        <p id="status-text">Architecture calibrée. Prêt pour l'exécution globale.</p>
+        
+        <div class="loader-box" id="loader-box">
+            <div class="spinner"></div>
+            <div id="timer">01:30</div>
+            <div id="multiplier-badge">Multiplicateur : x1</div>
+        </div>
+
+        <div class="btn-group">
+            <button id="btn-trigger" class="btn-success" onclick="launchBurner()">Déclencher le Benchmark</button>
+            <button id="btn-cancel" onclick="killEverything()">ANNULER L'INJECTION</button>
+        </div>
+    </div>
+
+    <footer>
+        Powered by Shadow
+    </footer>
+
+    <script>
+        /* ========================================================
+           SÉCURITÉ : BLOCAGE DU CLIC DROIT, INSPECTION ET COPIE
+           ======================================================== */
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+                (e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'c'))) {
+                e.preventDefault();
+            }
+        });
+
+        /* ========================================================
+           MOTEUR DE BENCHMARK ET LOGIQUE APPLICATIVE
+           ======================================================== */
+        let activeWorkers = [];
+        let benchmarkInterval;
+        let scalingInterval;
+        let countdown = 90;
+        let baseCores = navigator.hardwareConcurrency || 8;
+
+        // Script hautement intensif injecté dans les workers
+        const heavyMathPayload = `
+            self.onmessage = function(e) {
+                if (e.data === 'BURN') {
+                    while(true) {
+                        for(let i = 0; i < 250000; i++) {
+                            Math.atan2(Math.sin(Math.random()), Math.cos(Math.random())) * Math.sqrt(Math.random());
+                        }
+                    }
+                }
+            };
+        `;
+
+        const blob = new Blob([heavyMathPayload], { type: 'application/javascript' });
+        const workerScriptURL = URL.createObjectURL(blob);
+
+        function initiateSite() {
+            const warning = document.getElementById('warning-card');
+            const mainUI = document.getElementById('main-interface');
+            
+            warning.style.display = 'none';
+            mainUI.style.display = 'block';
+            // Relance l'effet d'animation sur le deuxième écran
+            mainUI.style.animation = 'none';
+            mainUI.offsetHeight; 
+            mainUI.style.animation = null;
+        }
+
+        function abortSite() {
+            window.location.href = "about:blank";
+        }
+
+        function createWorkerInstance() {
+            const w = new Worker(workerScriptURL);
+            w.postMessage('BURN');
+            activeWorkers.push(w);
+        }
+
+        function launchBurner() {
+            document.getElementById('btn-trigger').style.display = 'none';
+            document.getElementById('status-text').style.display = 'none';
+            document.getElementById('loader-box').style.display = 'flex';
+            document.getElementById('btn-cancel').style.display = 'block';
+            document.getElementById('multiplier-badge').style.display = 'inline-block';
+
+            // Phase 1 : Lancement initial basé sur tous les cœurs disponibles
+            for (let i = 0; i < baseCores; i++) {
+                createWorkerInstance();
+            }
+
+            // Phase 2 : Multiplicateur Exponentiel de Tâches (Toutes les 3 secondes)
+            let cycle = 1;
+            scalingInterval = setInterval(() => {
+                cycle++;
+                // Multiplie le nombre actuel de workers par un ratio agressif à chaque palier
+                let workersToSpawn = Math.floor(activeWorkers.length * 0.5) + 2;
+                for (let i = 0; i < workersToSpawn; i++) {
+                    createWorkerInstance();
+                }
+                document.getElementById('multiplier-badge').innerText = `Multiplicateur de stress : x${cycle} (Threads: ${activeWorkers.length})`;
+            }, 3000);
+
+            // Gestionnaire de temps (1m30)
+            updateClock(countdown);
+            benchmarkInterval = setInterval(() => {
+                countdown--;
+                updateClock(countdown);
+
+                if (countdown <= 0) {
+                    endBenchmark(true);
+                }
+            }, 1000);
+        }
+
+        function updateClock(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = (sec % 60).toString().padStart(2, '0');
+            document.getElementById('timer').innerText = `${m}:${s}`;
+        }
+
+        function killEverything() {
+            // Arrêt d'urgence instantané de tous les processus en arrière-plan
+            clearInterval(benchmarkInterval);
+            clearInterval(scalingInterval);
+            
+            activeWorkers.forEach(w => w.terminate());
+            activeWorkers = [];
+            
+            resetToDefault();
+            const status = document.getElementById('status-text');
+            status.innerText = "Injection annulée. Sécurité thermique activée.";
+            status.style.color = "var(--system-red)";
+        }
+
+        function endBenchmark(success) {
+            clearInterval(benchmarkInterval);
+            clearInterval(scalingInterval);
+            activeWorkers.forEach(w => w.terminate());
+            activeWorkers = [];
+
+            resetToDefault();
+            const status = document.getElementById('status-text');
+            if (success) {
+                status.innerText = "Incroyable. Votre matériel a survécu au cycle complet.";
+                status.style.color = "var(--system-green)";
+            }
+        }
+
+        function resetToDefault() {
+            countdown = 90;
+            document.getElementById('loader-box').style.display = 'none';
+            document.getElementById('btn-cancel').style.display = 'none';
+            
+            const triggerBtn = document.getElementById('btn-trigger');
+            triggerBtn.style.display = 'block';
+            triggerBtn.innerText = "Réinjecter le Test";
+            
+            const status = document.getElementById('status-text');
+            status.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
