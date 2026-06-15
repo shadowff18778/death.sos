@@ -3,292 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Death.SOS</title>
+    <title>Death.SOS | Pure Stress</title>
     <style>
         :root {
-            --ios-blur: blur(40px) saturate(200%);
-            --ios-bg: rgba(255, 255, 255, 0.08);
-            --ios-border: rgba(255, 255, 255, 0.12);
-            --text-main: #ffffff;
-            --text-sub: rgba(255, 255, 255, 0.5);
-            --system-red: #ff3b30;
-            --system-blue: #007aff;
-            --system-green: #34c759;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-heavy: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.15);
+            --red: #ff3b30;
+            --green: #34c759;
         }
 
-        /* Verrouillage Total */
         * {
             box-sizing: border-box;
             -webkit-user-select: none;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
             margin: 0;
             padding: 0;
+            cursor: none !important; /* Cache le curseur pour plus d'immersion */
         }
 
         body {
             height: 100vh;
             background: #000;
-            background-image: radial-gradient(circle at 50% 50%, #1c1c1e 0%, #000 100%);
-            font-family: -apple-system, system-ui, sans-serif;
-            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            color: white;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             overflow: hidden;
-            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+            padding: 20px;
         }
 
-        /* Titre Flottant */
-        header {
-            margin-top: 5vh;
+        /* Arrière-plan animé type liquide */
+        .bg-glow {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 70%);
+            z-index: -1;
+            animation: pulseBg 10s ease-in-out infinite;
+        }
+
+        @keyframes pulseBg {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Fenêtres avec animations fluides */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            border: 1px solid var(--border);
+            border-radius: 45px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            animation: float 4s ease-in-out infinite;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            
+            /* Entrée liquide */
+            transform: translateY(100px) scale(0.8);
+            opacity: 0;
+            animation: entry 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes entry {
+            to { transform: translateY(0) scale(1); opacity: 1; }
         }
 
-        header h1 {
-            font-size: clamp(32px, 8vw, 48px);
+        h1 {
+            font-size: 42px;
             font-weight: 800;
             letter-spacing: -2px;
-            background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.4) 100%);
+            margin-bottom: 10px;
+            background: linear-gradient(180deg, #fff, #666);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Carte Glassmorphism Liquide */
-        .glass-card {
-            background: var(--ios-bg);
-            backdrop-filter: var(--ios-blur);
-            -webkit-backdrop-filter: var(--ios-blur);
-            border: 1px solid var(--ios-border);
-            border-radius: 40px;
-            padding: 35px;
+        p { color: rgba(255,255,255,0.5); font-size: 16px; line-height: 1.4; margin-bottom: 30px; }
+
+        /* Boutons iOS */
+        .btn {
             width: 100%;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            
-            /* Animation Élastique */
-            transform: scale(0.8) translateY(50px);
-            opacity: 0;
-            animation: liquidIn 1s cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
-        }
-
-        @keyframes liquidIn {
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        h2 { font-size: 24px; color: var(--system-red); margin-bottom: 15px; }
-        p { font-size: 16px; color: var(--text-sub); line-height: 1.5; }
-
-        /* Boutons Style iPhone */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
-            font-size: 17px;
-            font-weight: 600;
-            border-radius: 18px;
+            padding: 20px;
+            border-radius: 20px;
             border: none;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
-            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 15px;
         }
 
-        button:active { transform: scale(0.92); }
-        .btn-main { background: var(--system-red); }
-        .btn-sub { background: rgba(255,255,255,0.1); }
-        .btn-start { background: var(--system-green); font-size: 20px; }
+        .btn-red { background: var(--red); color: white; box-shadow: 0 10px 30px rgba(255, 59, 48, 0.3); }
+        .btn-red:active { transform: scale(0.9) rotate(-1deg); }
 
-        /* Interface Benchmark */
-        #benchmark-ui { display: none; }
+        .btn-outline { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); }
 
-        .loader-container {
-            margin: 25px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .liquid-spinner {
-            width: 80px;
-            height: 80px;
-            border: 6px solid var(--ios-border);
-            border-top: 6px solid var(--system-red);
-            border-radius: 50%;
-            animation: spin 0.6s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
-            filter: drop-shadow(0 0 10px var(--system-red));
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
+        /* Timer de destruction */
         #timer {
-            font-size: 50px;
-            font-weight: 800;
-            margin-top: 20px;
+            font-size: 64px;
+            font-weight: 900;
             font-variant-numeric: tabular-nums;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'SF Mono', monospace;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
-        #stress-meter {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            margin-top: 15px;
-            overflow: hidden;
-        }
-
-        #stress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--system-green), var(--system-red));
-            transition: width 1s linear;
-        }
-
-        /* Signature */
-        footer {
-            margin-bottom: 2vh;
-            color: var(--text-sub);
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        #btn-abort {
-            display: none;
-            color: var(--system-red);
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
             background: rgba(255,59,48,0.1);
-            border: 1px solid var(--system-red);
+            border: 1px solid var(--red);
+            color: var(--red);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        footer {
+            position: absolute;
+            bottom: 30px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 2px;
+        }
+
+        .safety-bar {
+            font-size: 10px;
+            color: var(--red);
             margin-top: 20px;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <div class="bg-glow"></div>
+
+    <!-- ÉCRAN D'ACCUEIL -->
+    <div id="screen-warning" class="glass-panel">
+        <div class="status-badge">Danger : Overheat Zone</div>
         <h1>Death.SOS</h1>
-    </header>
-
-    <!-- Écran 1: Avertissement -->
-    <div id="card-warning" class="glass-card">
-        <h2>Extreme Stress Test</h2>
-        <p>Ce protocole va saturer chaque transistor de votre processeur. Surchauffe garantie.</p>
-        <div class="btn-group">
-            <button class="btn-main" onclick="goToMain()">J'accepte les risques</button>
-            <button class="btn-sub" onclick="window.location.href='about:blank'">Quitter</button>
-        </div>
+        <p>Préparez-vous à une saturation matérielle totale. Chaque seconde multiplie la charge de calcul.</p>
+        <button class="btn btn-red" onclick="startInterface()">ACCEPTER L'INJECTION</button>
+        <button class="btn btn-outline" onclick="window.location.href='about:blank'">REFUSER</button>
     </div>
 
-    <!-- Écran 2: Site Principal -->
-    <div id="benchmark-ui" class="glass-card">
-        <p id="info-text">Prêt pour l'injection ?</p>
-        
-        <div class="loader-container" id="loading-zone" style="display:none;">
-            <div class="liquid-spinner"></div>
-            <div id="timer">01:30</div>
-            <div id="stress-meter"><div id="stress-bar"></div></div>
-            <p style="margin-top: 10px; color: var(--system-red); font-weight: bold;">CPU SATURATION AT MAX</p>
-        </div>
-
-        <div class="btn-group">
-            <button id="btn-start" class="btn-start" onclick="startFlame()">START BENCHMARK</button>
-            <button id="btn-abort" onclick="stopEverything()">ABORT MISSION</button>
-        </div>
-
-        <p style="font-size: 10px; color: var(--system-red); margin-top: 20px;">
-            ⚠️ FREEZE ? Maintenez POWER 12 sec.
-        </p>
+    <!-- ÉCRAN DE BENCHMARK -->
+    <div id="screen-main" class="glass-panel" style="display:none;">
+        <div id="timer">01:30</div>
+        <p id="cpu-msg">CPU Ready for Execution...</p>
+        <button id="start-trigger" class="btn btn-red" onclick="launchTrueHell()">START BURNER</button>
+        <button id="abort-btn" class="btn btn-outline" style="display:none;" onclick="stopDeath()">ABORT IMMEDIATELY</button>
+        <div class="safety-bar">FORCE REBOOT : HOLD POWER 12S</div>
     </div>
 
-    <footer>Powered by Shadow</footer>
+    <footer>POWERED BY SHADOW</footer>
 
     <script>
-        // Verrouillage Sécurité
+        // Verrouillage total pour mobile/PC
         document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey)) return false; };
+        document.onkeydown = e => { if(e.keyCode == 123) return false; };
 
         let workers = [];
-        let clockInterval;
-        let time = 90;
+        let timerInt;
+        let count = 90;
 
-        const workerCode = `
+        // LE MOTEUR DE DESTRUCTION (Worker hyper complexe)
+        const workerScript = `
             self.onmessage = function() {
-                // Algorithme de torture sans consommation massive de RAM
-                function torture() {
-                    let x = 0;
+                function isPrime(num) {
+                    for(let i = 2, s = Math.sqrt(num); i <= s; i++)
+                        if(num % i === 0) return false; 
+                    return num > 1;
+                }
+
+                function heavyLogic() {
+                    let iterations = 0;
                     while(true) {
-                        x = Math.sqrt(Math.random() * 1000000);
-                        Math.atan2(Math.sin(x), Math.cos(x));
-                        if(x % 1000000 == 0) { /* Petit repos pour pas crash le thread principal */ }
+                        // 1. Calcul de nombres premiers sur des grands nombres
+                        let start = Math.floor(Math.random() * 1000000000);
+                        for(let i = start; i < start + 500; i++) {
+                            isPrime(i);
+                        }
+
+                        // 2. Calcul de Fibonacci récursif (Torture de la pile d'appel)
+                        function fib(n) {
+                            if (n <= 1) return n;
+                            return fib(n - 1) + fib(n - 2);
+                        }
+                        fib(25); // Juste assez pour saturer sans crash immédiat
+
+                        // 3. Opérations Bitwise agressives
+                        let a = 0x12345678;
+                        for(let j = 0; j < 100000; j++) {
+                            a = (a ^ (a << 13)) ^ (a >> 17);
+                            a ^= (a << 5);
+                        }
+                        
+                        iterations++;
                     }
                 }
-                torture();
+                heavyLogic();
             };
         `;
 
-        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        const blob = new Blob([workerScript], { type: 'application/javascript' });
         const workerURL = URL.createObjectURL(blob);
 
-        function goToMain() {
-            document.getElementById('card-warning').style.display = 'none';
-            document.getElementById('benchmark-ui').style.display = 'block';
+        function startInterface() {
+            document.getElementById('screen-warning').style.display = 'none';
+            const main = document.getElementById('screen-main');
+            main.style.display = 'block';
         }
 
-        function startFlame() {
-            document.getElementById('btn-start').style.display = 'none';
-            document.getElementById('info-text').style.display = 'none';
-            document.getElementById('loading-zone').style.display = 'flex';
-            document.getElementById('btn-abort').style.display = 'block';
+        function launchTrueHell() {
+            document.getElementById('start-trigger').style.display = 'none';
+            document.getElementById('abort-btn').style.display = 'block';
+            document.getElementById('cpu-msg').innerText = "INJECTING CHAOS...";
+            document.getElementById('cpu-msg').style.color = "#ff3b30";
 
-            // Détection des cœurs et lancement
-            const cores = navigator.hardwareConcurrency || 8;
+            const cores = navigator.hardwareConcurrency || 12;
+
+            // Lancement initial : saturation de tous les cœurs
             for(let i = 0; i < cores; i++) {
-                let w = new Worker(workerURL);
-                w.postMessage('go');
-                workers.push(w);
+                spawnWorker();
             }
 
-            // Chrono et barre de stress
-            clockInterval = setInterval(() => {
-                time--;
-                let min = Math.floor(time / 60).toString().padStart(2, '0');
-                let sec = (time % 60).toString().padStart(2, '0');
-                document.getElementById('timer').innerText = `${min}:${sec}`;
-                
-                // Progression barre de stress
-                let prog = ((90 - time) / 90) * 100;
-                document.getElementById('stress-bar').style.width = prog + '%';
+            // Boucle de multiplication exponentielle : On rajoute des workers toutes les 5 secondes
+            // Même si les cœurs physiques sont pleins, le système va "throttler" pour tout gérer
+            const exponentialInt = setInterval(() => {
+                if(count <= 0) clearInterval(exponentialInt);
+                for(let i = 0; i < 4; i++) spawnWorker();
+            }, 5000);
 
-                if(time <= 0) stopEverything(true);
+            timerInt = setInterval(() => {
+                count--;
+                updateDisplay();
+                if(count <= 0) stopDeath(true);
             }, 1000);
         }
 
-        function stopEverything(success = false) {
-            clearInterval(clockInterval);
+        function spawnWorker() {
+            let w = new Worker(workerURL);
+            w.postMessage('burn');
+            workers.push(w);
+        }
+
+        function updateDisplay() {
+            let m = Math.floor(count / 60).toString().padStart(2, '0');
+            let s = (count % 60).toString().padStart(2, '0');
+            document.getElementById('timer').innerText = `${m}:${s}`;
+            
+            // Effet visuel de glitch plus le temps passe
+            if(count < 30) {
+                document.body.style.filter = `hue-rotate(${Math.random()*20}deg) contrast(${1 + Math.random()*0.1})`;
+            }
+        }
+
+        function stopDeath(finished = false) {
+            clearInterval(timerInt);
             workers.forEach(w => w.terminate());
             workers = [];
+            document.body.style.filter = "none";
             
-            document.getElementById('loading-zone').style.display = 'none';
-            document.getElementById('btn-abort').style.display = 'none';
-            document.getElementById('btn-start').style.display = 'block';
-            document.getElementById('btn-start').innerText = "RETRY TEST";
-            document.getElementById('info-text').style.display = 'block';
-            document.getElementById('info-text').innerText = success ? "MISSION ACCOMPLIE 🔥" : "TEST ANNULÉ ❄️";
-            document.getElementById('info-text').style.color = success ? "var(--system-green)" : "var(--system-red)";
+            document.getElementById('timer').innerText = finished ? "DEAD" : "SAFE";
+            document.getElementById('cpu-msg').innerText = finished ? "HARDWARE SURVIVED." : "ABORTED.";
+            document.getElementById('cpu-msg').style.color = finished ? "#34c759" : "#ff3b30";
+            document.getElementById('abort-btn').style.display = 'none';
         }
     </script>
 </body>
